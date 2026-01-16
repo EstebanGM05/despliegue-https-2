@@ -25,6 +25,17 @@ const App = () => {
     }
   };
 
+  // 🔹 NUEVA FUNCIÓN
+  const obtenerServidor = async () => {
+    try {
+      const res = await fetch('/api/servidor');
+      const data = await res.json();
+      setMensaje(data.mensaje);
+    } catch (err) {
+      setMensaje('Error: ' + err);
+    }
+  };
+
   return (
     <div style={{ fontFamily: 'Arial', padding: '20px' }}>
       <h1>React Vite Docker + HTTPS</h1>
@@ -40,11 +51,7 @@ const App = () => {
         Pedir despedida al backend
       </button>
       <button
-        onClick={() => {
-          fetch('/api/servidor')
-            .then(res => res.json())
-            .then(data => setMensaje(data.mensaje));
-        }}
+        onClick={obtenerServidor}
         style={{ marginLeft: '10px' }}
       >
         Pedir servidor inverso al backend
