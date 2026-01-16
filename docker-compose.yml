@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "443:443"
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env.development
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: testdb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: example
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    restart: always
+
+volumes:
+  mysql_data:
